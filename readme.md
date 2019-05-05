@@ -27,7 +27,7 @@ to create a fully-fledged themed scene with JavaFx Controllers.
 **Add the library to your project**
 
 ``` groovy
-not_uploaded_yet
+compile 'com.jayfella:jme-jfx-11:1.0.0'
 ```
 
 **Integrate it into your game**
