@@ -128,3 +128,36 @@ JavaFxUI.showDialog(myJavaFxControl, false);
 JavaFxUI.removeDialog();
 
 ```
+
+
+**Update Loops**
+
+If you need an update loop in your control, implement the JmeUpdateLoop interface and you will be provided with a `update(float tpf)` method that will be called every frame.
+
+```
+public class MyControl implements JmeUpdateLoop {
+    @Override
+    public void update(float tpf) {
+        // update logic goes here...
+    }
+}
+```
+
+**Add and Remove Notifications**
+
+If your control requires notification that it has been added or removed, implement the SceneNotifier interface. You will be provided with an `onAttached(Application app)` and `void onDetached()` method that is called when it is added and removed from the scene.
+
+```
+public class MyControl implements SceneNotifier {
+    @Override
+    public void onAttached(Application app) {
+        // called whenever you add this control to the JavaFX scene.
+    }
+
+    @Override
+    public void onDetached() {
+        // called whenever this control is removed from the scene.
+    }
+
+}
+```
