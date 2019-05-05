@@ -16,7 +16,8 @@ This repository is based on the original JME-JFX repository above, and is a Java
   
 **Introduction**  
 This implementation is based on the JavaSaBr implementation of JME-JFX with the dependency to RLib removed
-and any 3D scene code removed, leaving only the 2D GuiNode implementation.  
+and any 3D scene code removed, leaving only the 2D GuiNode implementation.
+Additionally no external repository URLs are required. Simply add the dependency to your project.
 
 In practice it makes sense to use JavaFX as a 2D GUI, and for the 3D scene I recommend Lemur.
 
