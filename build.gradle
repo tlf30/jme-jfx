@@ -1,0 +1,56 @@
+plugins {
+    id 'java'
+    id 'maven'
+    id 'org.openjfx.javafxplugin' version '0.0.7'
+}
+
+group 'com.jayfella'
+version '1.0'
+
+sourceCompatibility = 11
+
+repositories {
+    jcenter()
+}
+
+javafx {
+    version = "11"
+    modules = [
+            'javafx.base',
+            'javafx.controls',
+            'javafx.fxml',
+            'javafx.graphics',
+            'javafx.media',
+            'javafx.swing',
+            'javafx.web'
+    ]
+}
+
+project.ext {
+    jmeVer = "[3.3,)"
+    log4jVer = "1.2.17"
+    slf4jVer = "1.7.25"
+}
+
+dependencies {
+    implementation "org.jmonkeyengine:jme3-core:$jmeVer"
+    implementation "org.jmonkeyengine:jme3-lwjgl3:$jmeVer"
+
+    implementation "log4j:log4j:$log4jVer"
+    implementation "org.slf4j:slf4j-api:$slf4jVer"
+    implementation "org.slf4j:jul-to-slf4j:$slf4jVer"
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar, javadocJar
+} 
