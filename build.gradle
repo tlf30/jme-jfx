@@ -1,3 +1,13 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    
+    dependencies {
+        classpath "org.openjfx:javafx-plugin:0.0.7"
+    }
+}
+
 plugins {
     id 'java'
     id 'maven'
@@ -6,6 +16,19 @@ plugins {
 
 allprojects {
     apply plugin: 'org.openjfx.javafxplugin'
+
+    javafx { // https://openjfx.io/javadoc/11/
+        version = "11.0.2"
+        modules = [
+                'javafx.base',
+                'javafx.controls',
+                'javafx.fxml',
+                'javafx.graphics',
+                'javafx.media',
+                'javafx.swing',
+                'javafx.web',
+        ]
+    }
 }
 
 group 'com.jayfella'
@@ -15,14 +38,6 @@ sourceCompatibility = 11
 
 repositories {
     jcenter()
-}
-
-javafx {
-    version = "11.0.2"
-    modules = [
-            'javafx.controls',
-            'javafx.fxml',
-    ]
 }
 
 project.ext {
@@ -38,6 +53,7 @@ dependencies {
     implementation "log4j:log4j:$log4jVer"
     implementation "org.slf4j:slf4j-api:$slf4jVer"
     implementation "org.slf4j:jul-to-slf4j:$slf4jVer"
+
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
