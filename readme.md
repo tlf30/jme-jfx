@@ -125,7 +125,7 @@ JavaFxUI.removeDialog();
 If you need an update loop in your control, implement the JmeUpdateLoop interface and you will be provided with a
  `update(float tpf)` method that will be called every frame.
 
-```
+``` java
 public class MyControl implements JmeUpdateLoop {
     @Override
     public void update(float tpf) {
@@ -139,7 +139,7 @@ public class MyControl implements JmeUpdateLoop {
 If your control requires notification that it has been added or removed, implement the SceneNotifier interface.
 You will be provided with an `onAttached(Application app)` and `void onDetached()` method that is called when it is added and removed from the scene.
 
-```
+``` java
 public class MyControl implements SceneNotifier {
     @Override
     public void onAttached(Application app) {
