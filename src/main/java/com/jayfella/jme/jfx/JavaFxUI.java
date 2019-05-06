@@ -11,6 +11,7 @@ import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import javafx.application.Platform;
 import javafx.scene.Group;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -36,6 +37,11 @@ public class JavaFxUI {
 
     private static int camWidth, camHeight;
 
+    /**
+     * Initializes the JavaFxUI class ready for use.
+     * This initialization must be called first before this class is ready for use.
+     * @param application the Jmonkey Application.
+     */
     public static void initialize(Application application) {
         app = application;
 
@@ -85,78 +91,135 @@ public class JavaFxUI {
 
     }
 
+    /**
+     * Attach a javafx.scene.Node to the GUI scene.
+     * @param node the node to attach to the scene.
+     */
     public static void attachChild(javafx.scene.Node node) {
-        JfxPlatform.runInFxThread(() ->uiscene.getChildren().add(node));
-
-        if (node instanceof JmeUpdateLoop) {
-            updatingItems.add((JmeUpdateLoop) node);
-        }
-
-        if (node instanceof SceneNotifier) {
-            ((SceneNotifier)node).onAttached(app);
-        }
+        JfxPlatform.runInFxThread(() ->{
+            uiscene.getChildren().add(node);
+            recursivelyNotifyChildrenAdded(node);
+        });
     }
 
+    /**
+     * Detach a node from the GUI scene.
+     * @param node the node to detach from the scene.
+     */
     public static void detachChild(javafx.scene.Node node) {
-        JfxPlatform.runInFxThread(() ->uiscene.getChildren().remove(node));
-
-        if (node instanceof JmeUpdateLoop) {
-            updatingItems.remove(node);
-        }
-
-        if (node instanceof SceneNotifier) {
-            ((SceneNotifier)node).onDetached();
-        }
+        JfxPlatform.runInFxThread(() ->{
+            uiscene.getChildren().remove(node);
+            recursivelyNotifyChildrenRemoved(node);
+        });
     }
 
+    /**
+     * Detach a node from the GUI scene.
+     * @param fxId the fx:id of the node.
+     */
     public static void detachChild(String fxId) {
         JfxPlatform.runInFxThread(() -> {
+
             javafx.scene.Node node = uiscene.lookup("#" + fxId);
+
             if (node != null) {
                 uiscene.getChildren().remove(node);
-
-                app.enqueue(() -> {
-                    if (node instanceof JmeUpdateLoop) {
-                        updatingItems.remove(node);
-                    }
-
-                    if (node instanceof SceneNotifier) {
-                        ((SceneNotifier)node).onDetached();
-                    }
-                });
+                recursivelyNotifyChildrenRemoved(node);
             }
         });
     }
 
+    /**
+     * Get a control from the scene with the given fx:id
+     * @param fxId the String fx:id if the node.
+     * @return the node with the given name, or null if the node was not found.
+     */
     public static javafx.scene.Node getChild(String fxId) {
         return uiscene.lookup("#" + fxId);
     }
 
-    /* removed for now,
-    // I need to determine the best way to notify all children in the entire hierarchy that implement SceneNotifier.
-    // I should probably just keep a reference to them.
+    /**
+     * Removes all children from the GUI scene.
+     */
     public static void removeAllChildren() {
-        updatingItems.clear();
-
         JfxPlatform.runInFxThread(() -> {
 
-            uiscene.getChildren().forEach(node -> {
-                if (node instanceof SceneNotifier) {
-                    ((SceneNotifier) node).onDetached();
+            // remove the children before we notify them.
+
+            List<javafx.scene.Node> children = new ArrayList<>(uiscene.getChildren());
+            uiscene.getChildren().clear();
+
+            children.forEach(JavaFxUI::recursivelyNotifyChildrenRemoved);
+        });
+    }
+
+    private static void recursivelyNotifyChildrenRemoved(javafx.scene.Node node) {
+
+        // we can do these things in a single execution, rather than individual calls.
+        boolean sceneNotifier = node instanceof SceneNotifier;
+        boolean jmeUpdateLoop = node instanceof JmeUpdateLoop;
+
+        if (sceneNotifier || jmeUpdateLoop) {
+
+            app.enqueue(() -> {
+                if (sceneNotifier) {
+                    ((SceneNotifier)node).onDetached();
+                }
+
+                if (jmeUpdateLoop) {
+                    updatingItems.remove(node);
                 }
             });
+        }
 
-            // uiscene.getChildren().clear();
-
-        });
-
+        if (node instanceof Parent) {
+            Parent parent = (Parent) node;
+            parent.getChildrenUnmodifiable().forEach(JavaFxUI::recursivelyNotifyChildrenRemoved);
+        }
     }
-    */
 
+    private static void recursivelyNotifyChildrenAdded(javafx.scene.Node node) {
+
+        // we can do these things in a single execution, rather than individual calls.
+        boolean sceneNotifier = node instanceof SceneNotifier;
+        boolean jmeUpdateLoop = node instanceof JmeUpdateLoop;
+
+        if (sceneNotifier || jmeUpdateLoop) {
+
+            app.enqueue(() -> {
+                if (sceneNotifier) {
+                    ((SceneNotifier)node).onAttached(app);
+                }
+
+                if (jmeUpdateLoop) {
+                    updatingItems.add(((JmeUpdateLoop)node));
+                }
+            });
+        }
+
+        if (node instanceof Parent) {
+            Parent parent = (Parent) node;
+            parent.getChildrenUnmodifiable().forEach(JavaFxUI::recursivelyNotifyChildrenAdded);
+        }
+    }
+
+    /**
+     * Display a javafx.scene.Node as a centered dialog.
+     * A dimmed background will be drawn behind the node and any click events will be ignored
+     * on GUI items behind it.
+     * @param node the node to display as a dialog.
+     */
     public static void showDialog(javafx.scene.Node node) {
         showDialog(node, true);
     }
 
+    /**
+     * Display a javafx.scene.Node as a centered dialog.
+     * A dimmed or transparent background will be drawn behind the node and any click events will be ignored
+     * on GUI items behind it.
+     * @param node   the node to display as a dialog.
+     * @param dimmed whether or not to dim the scene behind the given node.
+     */
     public static void showDialog(javafx.scene.Node node, boolean dimmed) {
 
         // center the dialog
@@ -190,6 +253,9 @@ public class JavaFxUI {
         });
     }
 
+    /**
+     * Removes the shown dialog from the scene.
+     */
     public static void removeDialog() {
         JfxPlatform.runInFxThread(() -> {
             dialogAnchorPanel.getChildren().clear();
@@ -200,10 +266,18 @@ public class JavaFxUI {
         dialog = null;
     }
 
+    /**
+     * Execute a task on the JavaFX thread.
+     * @param task
+     */
     public static void runInJavaFxThread(Runnable task) {
         Platform.runLater(task);
     }
 
+    /**
+     * Execute a task on the Jmonkey GL thread.
+     * @param task
+     */
     public static void runInJmeThread(Runnable task) {
         app.enqueue(task);
     }
