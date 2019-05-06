@@ -3,31 +3,38 @@ jme-jfx-gui
 
 **Requires**: Java 11
 
-A JavaFX implementation for JmonkeyEngine that allows you to use regular a JavaFX
-GUI in your games.
+A JavaFX 11 implementation for JmonkeyEngine that allows you to use a regular JavaFX GUI in your games.
 
-**History**  
-
-Based on : https://github.com/empirephoenix/JME3-JFX  
-This repository is no longer maintained, and is the original Java 7/8 implementation.
-
-Based on : https://github.com/JavaSaBr/JME3-JFX  
-This repository is based on the original JME-JFX repository above, and is a Java 10/11 implementation.  
-  
-**Introduction**  
+**Introduction**
+-  
 This implementation is based on the JavaSaBr implementation of JME-JFX with the dependency to RLib removed
 and any 3D scene code removed, leaving only the 2D GuiNode implementation.
-Additionally no external repository URLs are required. Simply add the dependency to your project.
+Additionally no external repository URLs are required. Simply add the dependency to your project and start using it.
 
-In practice it makes sense to use JavaFX as a 2D GUI, and for the 3D scene I recommend Lemur.
+Why no 3D scene implementation? In practice it makes sense to use JavaFX as a 2D GUI, and for the 3D scene I recommend
+Lemur.
 
-This implementation supports FXML and CSS scenes, which means you can use the Gluon SceneBuilder application
-to create a fully-fledged themed scene with JavaFx Controllers.
+This implementation fully supports FXML and CSS, which means you can use the Gluon SceneBuilder application
+to create a fully-fledged themed scene with JavaFx Controllers. The JavaFX process of creating objects is unchanged
+and follows the regular JavaFX workflow.
 
 **Add the library to your project**
 
+**Gradle**
 ``` groovy
-compile 'com.jayfella:jme-jfx-11:1.0.0'
+dependencies {
+    compile 'com.jayfella:jme-jfx-11:1.0.0'
+}
+```
+
+**Maven**
+``` xml
+<dependency>
+    <groupId>com.jayfella</groupId>
+    <artifactId>jme-jfx-11</artifactId>
+    <version>1.0.0</version>
+    <type>pom</type>
+</dependency>
 ```
 
 **Integrate it into your game**
@@ -49,26 +56,9 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleInitApp() {
 
-        // integrate javafx into jmonkey.
         JavaFxUI.initialize(this);
-
-        // create a JavaFX control
-        Button button = new Button("Click Me");
         
-        // assign a click action
-        button.setOnAction(event -> {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, "I'm going to remove the button!");
-            alert.showAndWait();
-
-            // detach the button when it's clicked.
-            JavaFxUI.detachChild(button);
-        });
-
-        // set the position of the butotn
-        button.setLayoutX(30);
-        button.setLayoutY(20);
-
-        // attach it to the UI
+        Button button = new Button("Click Me");
         JavaFxUI.attachChild(button);
     }
 }
@@ -78,7 +68,6 @@ public class Main extends SimpleApplication {
 **Controls**
 You may create any JavaFX object that extends **javafx.scene.Node** in either code or fxml.
 Controllers and loading fxml from resources are all supported.
-
 
 Controls are added and removed similar to the jmonkey workflow via the JavaFxUI static class.
 
@@ -97,7 +86,7 @@ JavaFxUI.getChild(String fxId);
 ```
 
 Since all JavaFX controls run in the JavaFX thread, you may need to alternate between the JME thread and
-the JavaFX thread.
+the JavaFX thread. There are two convenience methods provided to do this.
 
 ``` java
 
@@ -129,10 +118,10 @@ JavaFxUI.removeDialog();
 
 ```
 
-
 **Update Loops**
 
-If you need an update loop in your control, implement the JmeUpdateLoop interface and you will be provided with a `update(float tpf)` method that will be called every frame.
+If you need an update loop in your control, implement the JmeUpdateLoop interface and you will be provided with a
+ `update(float tpf)` method that will be called every frame.
 
 ```
 public class MyControl implements JmeUpdateLoop {
@@ -145,7 +134,8 @@ public class MyControl implements JmeUpdateLoop {
 
 **Add and Remove Notifications**
 
-If your control requires notification that it has been added or removed, implement the SceneNotifier interface. You will be provided with an `onAttached(Application app)` and `void onDetached()` method that is called when it is added and removed from the scene.
+If your control requires notification that it has been added or removed, implement the SceneNotifier interface.
+You will be provided with an `onAttached(Application app)` and `void onDetached()` method that is called when it is added and removed from the scene.
 
 ```
 public class MyControl implements SceneNotifier {
