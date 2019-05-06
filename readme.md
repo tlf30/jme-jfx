@@ -24,7 +24,7 @@ and follows the regular JavaFX workflow.
 **Gradle**
 ``` groovy
 dependencies {
-    compile 'com.jayfella:jme-jfx-11:1.0.0'
+    implementation 'com.jayfella:jme-jfx-11:1.0.0'
 }
 ```
 
