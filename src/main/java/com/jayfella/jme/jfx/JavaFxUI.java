@@ -268,7 +268,7 @@ public class JavaFxUI {
 
     /**
      * Execute a task on the JavaFX thread.
-     * @param task
+     * @param task the task to execute.
      */
     public static void runInJavaFxThread(Runnable task) {
         Platform.runLater(task);
@@ -276,7 +276,7 @@ public class JavaFxUI {
 
     /**
      * Execute a task on the Jmonkey GL thread.
-     * @param task
+     * @param task the task to execute.
      */
     public static void runInJmeThread(Runnable task) {
         app.enqueue(task);
