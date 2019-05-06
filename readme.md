@@ -19,6 +19,7 @@ to create a fully-fledged themed scene with JavaFx Controllers. The JavaFX proce
 and follows the regular JavaFX workflow.
 
 **Add the library to your project**
+-
 
 **Gradle**
 ``` groovy
@@ -38,7 +39,7 @@ dependencies {
 ```
 
 **Integrate it into your game**
-
+-
 ``` java
 
 public class Main extends SimpleApplication {
@@ -66,6 +67,7 @@ public class Main extends SimpleApplication {
 ```
 
 **Controls**
+-
 You may create any JavaFX object that extends **javafx.scene.Node** in either code or fxml.
 Controllers and loading fxml from resources are all supported.
 
@@ -119,7 +121,7 @@ JavaFxUI.removeDialog();
 ```
 
 **Update Loops**
-
+-
 If you need an update loop in your control, implement the JmeUpdateLoop interface and you will be provided with a
  `update(float tpf)` method that will be called every frame.
 
@@ -133,7 +135,7 @@ public class MyControl implements JmeUpdateLoop {
 ```
 
 **Add and Remove Notifications**
-
+-
 If your control requires notification that it has been added or removed, implement the SceneNotifier interface.
 You will be provided with an `onAttached(Application app)` and `void onDetached()` method that is called when it is added and removed from the scene.
 
