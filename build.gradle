@@ -4,8 +4,12 @@ plugins {
     id 'org.openjfx.javafxplugin' version '0.0.7'
 }
 
+allprojects {
+    apply plugin: 'org.openjfx.javafxplugin'
+}
+
 group 'com.jayfella'
-version '1.0.0'
+version '1.0.1'
 
 sourceCompatibility = 11
 
@@ -14,15 +18,10 @@ repositories {
 }
 
 javafx {
-    version = "11"
+    version = "11.0.2"
     modules = [
-            'javafx.base',
             'javafx.controls',
             'javafx.fxml',
-            'javafx.graphics',
-            'javafx.media',
-            'javafx.swing',
-            'javafx.web'
     ]
 }
 
