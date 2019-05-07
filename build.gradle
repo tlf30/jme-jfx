@@ -5,12 +5,12 @@ plugins {
 }
 
 javafx {
-    version = "11.0.3"
+    version = "11.0.2"
     modules = [ 'javafx.controls' ]
 }
 
 group 'com.jayfella'
-version '1.0.2'
+version '1.0.3'
 
 sourceCompatibility = 11
 
