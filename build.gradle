@@ -1,34 +1,14 @@
-buildscript {
-    repositories {
-        jcenter()
-    }
-    
-    dependencies {
-        classpath "org.openjfx:javafx-plugin:0.0.7"
-    }
-}
-
 plugins {
     id 'java'
     id 'maven'
     id 'org.openjfx.javafxplugin' version '0.0.7'
 }
 
-allprojects {
-    apply plugin: 'org.openjfx.javafxplugin'
+// apply plugin: 'org.openjfx.javafxplugin'
 
-    javafx { // https://openjfx.io/javadoc/11/
-        version = "11.0.2"
-        modules = [
-                'javafx.base',
-                'javafx.controls',
-                'javafx.fxml',
-                'javafx.graphics',
-                'javafx.media',
-                'javafx.swing',
-                'javafx.web',
-        ]
-    }
+javafx { // https://openjfx.io/javadoc/11/
+    version = "11.0.2"
+    modules = [ 'javafx.controls' ]
 }
 
 group 'com.jayfella'
