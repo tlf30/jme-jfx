@@ -23,20 +23,24 @@ and follows the regular JavaFX workflow.
 
 **Gradle**
 ``` groovy
+
+// add the openjfx plugin so you can use javafx
+plugins {
+    id 'org.openjfx.javafxplugin' version '0.0.7'
+}
+
+// choose the javafx modules you want to import.
+javafx { 
+    version = "11.0.2"
+    modules = [ 'javafx.controls', 'javafx.fxml' ]
+}
+
+// import the jme-jfx dependency
 dependencies {
     implementation 'com.jayfella:jme-jfx-11:1.0.0'
 }
 ```
 
-**Maven**
-``` xml
-<dependency>
-    <groupId>com.jayfella</groupId>
-    <artifactId>jme-jfx-11</artifactId>
-    <version>1.0.0</version>
-    <type>pom</type>
-</dependency>
-```
 
 **Integrate it into your game**
 -
