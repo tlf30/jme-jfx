@@ -6,11 +6,19 @@ plugins {
 
 javafx {
     version = "11.0.2"
-    modules = [ 'javafx.controls' ]
+    modules = [ 
+            'javafx.base',
+            'javafx.controls',
+            'javafx.fxml',
+            'javafx.graphics',
+            'javafx.media',
+            'javafx.swing',
+            'javafx.web',
+    ]
 }
 
 group 'com.jayfella'
-version '1.0.3'
+version '1.0.4'
 
 sourceCompatibility = 11
 
@@ -19,8 +27,7 @@ repositories {
 }
 
 project.ext {
-    jmeVer = "[3.3,)"
-    log4jVer = "1.2.17"
+    jmeVer = "3.2.3-stable"
     slf4jVer = "1.7.25"
 }
 
@@ -28,10 +35,7 @@ dependencies {
     implementation "org.jmonkeyengine:jme3-core:$jmeVer"
     implementation "org.jmonkeyengine:jme3-lwjgl3:$jmeVer"
 
-    implementation "log4j:log4j:$log4jVer"
     implementation "org.slf4j:slf4j-api:$slf4jVer"
-    implementation "org.slf4j:jul-to-slf4j:$slf4jVer"
-
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
