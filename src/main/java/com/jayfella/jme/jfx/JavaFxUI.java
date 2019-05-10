@@ -15,11 +15,15 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class JavaFxUI {
+
+    private static final Logger log = LoggerFactory.getLogger(JavaFxUI.class);
 
     private static Application app;
     private static JmeFxContainer container;
@@ -306,10 +310,18 @@ public class JavaFxUI {
         public void update(float tpf) {
 
             if (camWidth != cam.getWidth() || camHeight != cam.getHeight()) {
+
+                if (log.isDebugEnabled()) {
+                    log.debug("Bounds changing from [" + camWidth + "x" + camHeight + "] to [" + cam.getWidth() + "x" + cam.getHeight() + "]");
+                }
+
                 camWidth = cam.getWidth();
                 camHeight = cam.getHeight();
                 refreshSceneBounds();
-                System.out.println("Bounds Changed.");
+
+                if (log.isDebugEnabled()) {
+                    log.debug("Bounds refreshed.");
+                }
             }
 
             if (container.isNeedWriteToJme()) {
