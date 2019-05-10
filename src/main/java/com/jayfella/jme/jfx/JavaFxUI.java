@@ -41,8 +41,9 @@ public class JavaFxUI {
      * Initializes the JavaFxUI class ready for use.
      * This initialization must be called first before this class is ready for use.
      * @param application the Jmonkey Application.
+     * @param cssStyles   The global css stylesheets.
      */
-    public static void initialize(Application application) {
+    public static void initialize(Application application, String... cssStyles) {
         app = application;
 
         Node guiNode = ((SimpleApplication)application).getGuiNode();
@@ -57,6 +58,10 @@ public class JavaFxUI {
         scene = new Scene(group, app.getCamera().getWidth(), app.getCamera().getHeight());
         scene.setFill(Color.TRANSPARENT);
 
+        if (cssStyles != null) {
+            scene.getStylesheets().addAll(cssStyles);
+        }
+
         container.setScene(scene, group);
 
         dialogAnchorPanel = new AnchorPane();
@@ -69,6 +74,7 @@ public class JavaFxUI {
         camHeight = application.getCamera().getHeight();
 
         application.getStateManager().attach(new JavaFxUpdater());
+
     }
 
     private static void refreshSceneBounds() {
