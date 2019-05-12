@@ -25,29 +25,25 @@ public class JavaFxUI {
 
     private static final Logger log = LoggerFactory.getLogger(JavaFxUI.class);
 
-    private static Application app;
-    private static JmeFxContainer container;
+    private static JavaFxUI INSTANCE;
+
+    private Application app;
+    private JmeFxContainer container;
 
     // the general overlay
-    private static Group group;
-    private static Scene scene;
-    private static AnchorPane uiscene;
+    private Group group;
+    private Scene scene;
+    private AnchorPane uiscene;
 
     // dialog - overlays an anchorpane to stop clicking background items and allows "darkening" too.
-    private static AnchorPane dialogAnchorPanel;
-    private static  javafx.scene.Node dialog;
+    private AnchorPane dialogAnchorPanel;
+    private javafx.scene.Node dialog;
 
-    private static final List<JmeUpdateLoop> updatingItems = new ArrayList<>();
+    private final List<JmeUpdateLoop> updatingItems = new ArrayList<>();
 
-    private static int camWidth, camHeight;
+    private int camWidth, camHeight;
 
-    /**
-     * Initializes the JavaFxUI class ready for use.
-     * This initialization must be called first before this class is ready for use.
-     * @param application the Jmonkey Application.
-     * @param cssStyles   The global css stylesheets.
-     */
-    public static void initialize(Application application, String... cssStyles) {
+    private JavaFxUI(Application application, String... cssStyles) {
         app = application;
 
         Node guiNode = ((SimpleApplication)application).getGuiNode();
@@ -78,10 +74,23 @@ public class JavaFxUI {
         camHeight = application.getCamera().getHeight();
 
         application.getStateManager().attach(new JavaFxUpdater());
-
     }
 
-    private static void refreshSceneBounds() {
+    /**
+     * Initializes the JavaFxUI class ready for use.
+     * This initialization must be called first before this class is ready for use.
+     * @param application the Jmonkey Application.
+     * @param cssStyles   The global css stylesheets.
+     */
+    public static void initialize(Application application, String... cssStyles) {
+        INSTANCE = new JavaFxUI(application, cssStyles);
+    }
+
+    public static JavaFxUI getInstance() {
+        return INSTANCE;
+    }
+
+    private void refreshSceneBounds() {
 
         JfxPlatform.runInFxThread(() -> {
 
@@ -105,7 +114,7 @@ public class JavaFxUI {
      * Attach a javafx.scene.Node to the GUI scene.
      * @param node the node to attach to the scene.
      */
-    public static void attachChild(javafx.scene.Node node) {
+    public void attachChild(javafx.scene.Node node) {
         JfxPlatform.runInFxThread(() ->{
             uiscene.getChildren().add(node);
             recursivelyNotifyChildrenAdded(node);
@@ -116,7 +125,7 @@ public class JavaFxUI {
      * Detach a node from the GUI scene.
      * @param node the node to detach from the scene.
      */
-    public static void detachChild(javafx.scene.Node node) {
+    public void detachChild(javafx.scene.Node node) {
         JfxPlatform.runInFxThread(() ->{
             uiscene.getChildren().remove(node);
             recursivelyNotifyChildrenRemoved(node);
@@ -127,7 +136,7 @@ public class JavaFxUI {
      * Detach a node from the GUI scene.
      * @param fxId the fx:id of the node.
      */
-    public static void detachChild(String fxId) {
+    public void detachChild(String fxId) {
         JfxPlatform.runInFxThread(() -> {
 
             javafx.scene.Node node = uiscene.lookup("#" + fxId);
@@ -144,14 +153,14 @@ public class JavaFxUI {
      * @param fxId the String fx:id if the node.
      * @return the node with the given name, or null if the node was not found.
      */
-    public static javafx.scene.Node getChild(String fxId) {
+    public javafx.scene.Node getChild(String fxId) {
         return uiscene.lookup("#" + fxId);
     }
 
     /**
      * Removes all children from the GUI scene.
      */
-    public static void removeAllChildren() {
+    public void removeAllChildren() {
         JfxPlatform.runInFxThread(() -> {
 
             // remove the children before we notify them.
@@ -159,11 +168,11 @@ public class JavaFxUI {
             List<javafx.scene.Node> children = new ArrayList<>(uiscene.getChildren());
             uiscene.getChildren().clear();
 
-            children.forEach(JavaFxUI::recursivelyNotifyChildrenRemoved);
+            children.forEach(this::recursivelyNotifyChildrenRemoved);
         });
     }
 
-    private static void recursivelyNotifyChildrenRemoved(javafx.scene.Node node) {
+    private void recursivelyNotifyChildrenRemoved(javafx.scene.Node node) {
 
         // we can do these things in a single execution, rather than individual calls.
         boolean sceneNotifier = node instanceof SceneNotifier;
@@ -184,11 +193,11 @@ public class JavaFxUI {
 
         if (node instanceof Parent) {
             Parent parent = (Parent) node;
-            parent.getChildrenUnmodifiable().forEach(JavaFxUI::recursivelyNotifyChildrenRemoved);
+            parent.getChildrenUnmodifiable().forEach(this::recursivelyNotifyChildrenRemoved);
         }
     }
 
-    private static void recursivelyNotifyChildrenAdded(javafx.scene.Node node) {
+    private void recursivelyNotifyChildrenAdded(javafx.scene.Node node) {
 
         // we can do these things in a single execution, rather than individual calls.
         boolean sceneNotifier = node instanceof SceneNotifier;
@@ -209,7 +218,7 @@ public class JavaFxUI {
 
         if (node instanceof Parent) {
             Parent parent = (Parent) node;
-            parent.getChildrenUnmodifiable().forEach(JavaFxUI::recursivelyNotifyChildrenAdded);
+            parent.getChildrenUnmodifiable().forEach(this::recursivelyNotifyChildrenAdded);
         }
     }
 
@@ -219,7 +228,7 @@ public class JavaFxUI {
      * on GUI items behind it.
      * @param node the node to display as a dialog.
      */
-    public static void showDialog(javafx.scene.Node node) {
+    public void showDialog(javafx.scene.Node node) {
         showDialog(node, true);
     }
 
@@ -230,7 +239,7 @@ public class JavaFxUI {
      * @param node   the node to display as a dialog.
      * @param dimmed whether or not to dim the scene behind the given node.
      */
-    public static void showDialog(javafx.scene.Node node, boolean dimmed) {
+    public void showDialog(javafx.scene.Node node, boolean dimmed) {
 
         // center the dialog
         int scrWidth = app.getCamera().getWidth();
@@ -266,7 +275,7 @@ public class JavaFxUI {
     /**
      * Removes the shown dialog from the scene.
      */
-    public static void removeDialog() {
+    public void removeDialog() {
         JfxPlatform.runInFxThread(() -> {
             dialogAnchorPanel.getChildren().clear();
             uiscene.getChildren().remove(dialogAnchorPanel);
@@ -280,7 +289,7 @@ public class JavaFxUI {
      * Execute a task on the JavaFX thread.
      * @param task the task to execute.
      */
-    public static void runInJavaFxThread(Runnable task) {
+    public void runInJavaFxThread(Runnable task) {
         Platform.runLater(task);
     }
 
@@ -288,11 +297,11 @@ public class JavaFxUI {
      * Execute a task on the Jmonkey GL thread.
      * @param task the task to execute.
      */
-    public static void runInJmeThread(Runnable task) {
+    public void runInJmeThread(Runnable task) {
         app.enqueue(task);
     }
 
-    public static class JavaFxUpdater extends BaseAppState {
+    private class JavaFxUpdater extends BaseAppState {
 
         private Camera cam;
 
