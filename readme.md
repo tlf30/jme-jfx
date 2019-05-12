@@ -64,7 +64,7 @@ public class Main extends SimpleApplication {
         JavaFxUI.initialize(this);
         
         Button button = new Button("Click Me");
-        JavaFxUI.attachChild(button);
+        JavaFxUI.getInstance().attachChild(button);
     }
 }
 
@@ -80,14 +80,14 @@ Controls are added and removed similar to the jmonkey workflow via the JavaFxUI 
 ``` java
 
 // add a control
-JavaFxUI.attachChild(javafx.scene.Node node);
+JavaFxUI.getInstance().attachChild(javafx.scene.Node node);
 
 // remove a control
-JavaFxUI.detachChild(javafx.scene.Node node);
-JavaFxUI.detachChild(String fxId);
+JavaFxUI.getInstance().detachChild(javafx.scene.Node node);
+JavaFxUI.getInstance().detachChild(String fxId);
 
 // get a control
-JavaFxUI.getChild(String fxId);
+JavaFxUI.getInstance().getChild(String fxId);
 
 ```
 
@@ -97,12 +97,12 @@ the JavaFX thread. There are two convenience methods provided to do this.
 ``` java
 
 // do something in the JavaFX thread (such as update a label text)
-JavaFxUI.runInJavaFxThread(() -> {
+JavaFxUI.getInstance().runInJavaFxThread(() -> {
     myLabel.setText("changed text");
 });
 
 // do something in the JME thread (such as manipulate the scene)
-JavaFxUI.runInJmeThread(() -> {
+JavaFxUI.getInstance().runInJmeThread(() -> {
     someJmeNode.setLocalTranslation(x, y, z);
 });
 
@@ -114,13 +114,13 @@ These dialogs allow you to dim the background and stop background objects being 
 ``` java
 
 // display a javafx control that is centered in the screen with a dimmed background.
-JavaFxUI.showDialog(myJavaFxControl)
+JavaFxUI.getInstance().showDialog(myJavaFxControl)
 
 // display a javafx control that is centered and NOT dimmed.
-JavaFxUI.showDialog(myJavaFxControl, false);
+JavaFxUI.getInstance().showDialog(myJavaFxControl, false);
 
 // remove the dialog
-JavaFxUI.removeDialog();
+JavaFxUI.getInstance().removeDialog();
 
 ```
 
