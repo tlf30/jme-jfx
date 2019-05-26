@@ -37,7 +37,7 @@ javafx {
 
 // import the jme-jfx dependency
 dependencies {
-    implementation 'com.jayfella:jme-jfx-11:1.0.3'
+    implementation 'com.jayfella:jme-jfx-11:1.1.0'
 }
 ```
 
