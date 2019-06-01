@@ -23,7 +23,6 @@ import com.jme3.texture.image.ColorSpace;
 import com.jme3.ui.Picture;
 import com.jme3.util.BufferUtils;
 import com.sun.glass.ui.Pixels;
-import com.sun.javafx.application.PlatformImpl;
 import com.sun.javafx.cursor.CursorFrame;
 import com.sun.javafx.embed.AbstractEvents;
 import com.sun.javafx.embed.EmbeddedSceneInterface;
@@ -645,7 +644,7 @@ public class JmeFxContainerImpl implements JmeFxContainer, JmeFxContainerInterna
     }
 
     private void initFx() {
-        PlatformImpl.startup(() -> {
+        Platform.startup(() -> {
             switch (Pixels.getNativeFormat()) {
                 case Pixels.Format.BYTE_ARGB:
                     try {
