@@ -373,6 +373,7 @@ public class JmeFXInputListener implements RawInputListener {
         int button = AbstractEvents.MOUSEEVENT_NONE_BUTTON;
 
         final int wheelRotation = (int) Math.round(event.getDeltaWheel() / -120.0);
+        final int wheelTotalRotation = event.getWheel();
 
         if (wheelRotation != 0) {
             type = AbstractEvents.MOUSEEVENT_VERTICAL_WHEEL;
@@ -392,11 +393,11 @@ public class JmeFXInputListener implements RawInputListener {
         final int finalButton = button;
 
         if (inputManager.isCursorVisible()) {
-            JfxPlatform.runInFxThread(() -> onMouseMotionEventImpl(x, y, wheelRotation, finalType, finalButton));
+            JfxPlatform.runInFxThread(() -> onMouseMotionEventImpl(x, y, wheelRotation, wheelTotalRotation, finalType, finalButton));
         }
     }
 
-    private void onMouseMotionEventImpl(int x, int y, int wheelRotation, int type, int button) {
+    private void onMouseMotionEventImpl(int x, int y, int wheelRotation, int wheelTotalRotation, int type, int button) {
 
         final JmeFxContainerInternal container = getContainer();
         // final Application application = notNull(container.getApplication());
@@ -442,6 +443,37 @@ public class JmeFXInputListener implements RawInputListener {
         // Java 11 implementation
         sceneInterface.mouseEvent(type, button, primaryBtnDown, middleBtnDown, secondaryBtnDown, x, y, screenX, screenY,
                 shift, ctrl, alt, meta, false);
+
+
+
+        /*
+        public void scrollEvent(int type, double scrollX, double scrollY,
+                            double totalScrollX, double totalScrollY,
+                            double xMultiplier, double yMultiplier,
+                            double x, double y, double screenX, double screenY,
+                            boolean shift, boolean ctrl,
+                            boolean alt, boolean meta, boolean inertia);
+         */
+
+
+        // horizontal scroll
+        // NOT IMPLEMENTED
+        double scrollX = 0;
+        double totalScrollX = 1;
+        double xMultiplier = 50;
+
+        // vertical scroll
+        double scrollY = -wheelRotation;
+        double totalScrollY = wheelTotalRotation;
+        double yMultiplier = 60;
+
+        boolean inertia = false;
+
+        sceneInterface.scrollEvent(type, scrollX, scrollY,
+                totalScrollX, totalScrollY,
+                xMultiplier, yMultiplier,
+                x, y, screenX, screenY,
+                shift, ctrl, alt, meta, inertia);
     }
 
     @Override
