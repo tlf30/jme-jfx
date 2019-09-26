@@ -668,6 +668,7 @@ public class JmeFxContainerImpl implements JmeFxContainer, JmeFxContainerInterna
                     throw new IllegalArgumentException("Not supported javaFX pixel format " + Pixels.getNativeFormat());
             }
         });
+        Platform.setImplicitExit(false);
     }
 
     @Override
