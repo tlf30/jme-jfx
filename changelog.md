@@ -1,3 +1,11 @@
+1.1.3
+---
+* Fix for the jfx thread closing if no scene is present.
+
+1.1.2
+---
+* Added support for vertical mouse-wheel scrolling.
+
 1.1.0
 ---
 * Set jmonkey version to latest release instead of latest version.
@@ -6,6 +14,3 @@
 * Replace System.out.println outputs to logging system
 * Use singleton pattern. All methods are now called from .getInstance()
 
-1.1.2
----
-* Added support for vertical mouse-wheel scrolling.
