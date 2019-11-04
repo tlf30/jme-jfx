@@ -1,6 +1,9 @@
 jme-jfx-gui
 -
 
+ [ ![Download](https://api.bintray.com/packages/jayfella/com.jayfella/jme-jfx-11/images/download.svg) ](https://bintray.com/jayfella/com.jayfella/jme-jfx-11/_latestVersion) 
+ 
+
 **Requires**: Java 11
 
 A JavaFX 11 implementation for JmonkeyEngine that allows you to use a regular JavaFX GUI in your games.
