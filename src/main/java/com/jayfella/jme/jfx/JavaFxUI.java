@@ -1,5 +1,11 @@
 package com.jayfella.jme.jfx;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.jayfella.jme.jfx.impl.JmeUpdateLoop;
 import com.jayfella.jme.jfx.impl.SceneNotifier;
 import com.jayfella.jme.jfx.injme.JmeFxContainer;
@@ -9,17 +15,15 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.BaseAppState;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
+
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.geometry.Bounds;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class JavaFxUI {
 
@@ -38,6 +42,7 @@ public class JavaFxUI {
     // dialog - overlays an anchorpane to stop clicking background items and allows "darkening" too.
     private AnchorPane dialogAnchorPanel;
     private javafx.scene.Node dialog;
+    private ChangeListener<Bounds> dialogBoundsListener;
 
     private final List<JmeUpdateLoop> updatingItems = new ArrayList<>();
 
@@ -245,9 +250,11 @@ public class JavaFxUI {
         int scrWidth = app.getCamera().getWidth();
         int scrHeight = app.getCamera().getHeight();
 
-
-
         dialog = node;
+        dialogBoundsListener = (prop, oldBounds, newBounds) -> {
+        	node.setLayoutX(scrWidth * 0.5 - newBounds.getWidth() * 0.5);
+        	node.setLayoutY(scrHeight * 0.5 - newBounds.getHeight() * 0.5);
+		};
 
         if (dialog instanceof JmeUpdateLoop) {
             updatingItems.add((JmeUpdateLoop) dialog);
@@ -263,12 +270,9 @@ public class JavaFxUI {
             }
 
             uiscene.getChildren().add(dialogAnchorPanel);
+            
+            node.boundsInParentProperty().addListener(dialogBoundsListener);
 
-            float dialogWidth = (float) node.getBoundsInParent().getWidth();
-            float dialogHeight = (float) node.getBoundsInParent().getHeight();
-
-            node.setLayoutX((scrWidth * 0.5f) - (dialogWidth * 0.75f));
-            node.setLayoutY((scrHeight * 0.5f) - (dialogHeight * 0.75f));
         });
     }
 
@@ -282,7 +286,10 @@ public class JavaFxUI {
         });
 
         updatingItems.remove(dialog);
+        
+        dialog.boundsInParentProperty().removeListener(dialogBoundsListener);
         dialog = null;
+        dialogBoundsListener = null;
     }
 
     /**
