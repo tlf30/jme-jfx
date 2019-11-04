@@ -1,3 +1,7 @@
+1.1.4
+---
+* Fix for dialogs not centering correctly.
+
 1.1.3
 ---
 * Fix for the jfx thread closing if no scene is present.
