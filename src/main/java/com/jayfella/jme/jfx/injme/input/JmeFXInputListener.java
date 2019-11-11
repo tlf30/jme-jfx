@@ -4,6 +4,7 @@
  */
 package com.jayfella.jme.jfx.injme.input;
 
+import com.jayfella.jme.jfx.ProxyKeyInputEvent;
 import com.jme3.app.Application;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
@@ -197,7 +198,7 @@ public class JmeFXInputListener implements RawInputListener {
             }
         }
 
-        if (container.isFocused()) {
+        if (container.isFocused() && !(event instanceof ProxyKeyInputEvent)) {
             event.setConsumed();
         }
 
