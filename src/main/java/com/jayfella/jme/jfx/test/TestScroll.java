@@ -6,6 +6,9 @@ import javafx.event.EventType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 
+/**
+ * Tests horizontal and vertical scrolling using the mouse.
+ */
 public class TestScroll extends SimpleApplication {
 
     public static void main(String... args) {
