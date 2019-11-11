@@ -1,21 +1,15 @@
 package com.jayfella.jme.jfx;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.jayfella.jme.jfx.impl.JmeUpdateLoop;
 import com.jayfella.jme.jfx.impl.SceneNotifier;
 import com.jayfella.jme.jfx.injme.JmeFxContainer;
+import com.jayfella.jme.jfx.injme.JmeFxContainerImpl;
 import com.jayfella.jme.jfx.util.JfxPlatform;
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.BaseAppState;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
-
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.geometry.Bounds;
@@ -24,6 +18,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class JavaFxUI {
 
@@ -32,7 +31,7 @@ public class JavaFxUI {
     private static JavaFxUI INSTANCE;
 
     private Application app;
-    private JmeFxContainer container;
+    private JmeFxContainerImpl container;
 
     // the general overlay
     private Group group;
@@ -49,10 +48,11 @@ public class JavaFxUI {
     private int camWidth, camHeight;
 
     private JavaFxUI(Application application, String... cssStyles) {
+
         app = application;
 
         Node guiNode = ((SimpleApplication)application).getGuiNode();
-        container = JmeFxContainer.install(application, guiNode);
+        container = (JmeFxContainerImpl) JmeFxContainer.install(application, guiNode);
 
         group = new Group();
         uiscene = new AnchorPane();
@@ -79,6 +79,9 @@ public class JavaFxUI {
         camHeight = application.getCamera().getHeight();
 
         application.getStateManager().attach(new JavaFxUpdater());
+
+        CrossInputHandler crossInputHandler = new CrossInputHandler(application, uiscene);
+        crossInputHandler.bind();
     }
 
     /**
@@ -93,6 +96,20 @@ public class JavaFxUI {
 
     public static JavaFxUI getInstance() {
         return INSTANCE;
+    }
+
+    /**
+     * Set the input focus to JavaFx.
+     */
+    public void grabFocus() {
+        container.grabFocus();
+    }
+
+    /**
+     * Set the input focus to JME.
+     */
+    public void loseFocus() {
+        container.loseFocus();
     }
 
     private void refreshSceneBounds() {
