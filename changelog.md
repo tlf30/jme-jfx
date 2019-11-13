@@ -1,3 +1,7 @@
+1.1.5
+---
+* Fix for situations when *keyup* events are being consumed by javafx when JME consumes *keydown*.
+
 1.1.4
 ---
 * Fix for dialogs not centering correctly.
