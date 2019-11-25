@@ -1,6 +1,7 @@
 1.1.5
 ---
 * Fix for situations when *keyup* events are being consumed by javafx when JME consumes *keydown*.
+* Fix for situations when *mouseup* events are being consumed by javafx when JME comsumes *mousedown*.
 
 1.1.4
 ---
