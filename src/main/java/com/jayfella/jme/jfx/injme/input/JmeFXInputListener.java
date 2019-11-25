@@ -4,7 +4,6 @@
  */
 package com.jayfella.jme.jfx.injme.input;
 
-import com.jayfella.jme.jfx.ProxyKeyInputEvent;
 import com.jme3.app.Application;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
@@ -20,6 +19,7 @@ import javafx.scene.Scene;
 
 import java.awt.event.KeyEvent;
 import java.util.BitSet;
+import java.util.function.Function;
 
 import static java.util.Objects.requireNonNull;
 
@@ -60,6 +60,12 @@ public class JmeFXInputListener implements RawInputListener {
      */
     private volatile RawInputListener rawInputListener;
 
+    /**
+     *  Additional Evaluation function, which checks, if JFX is allowed to 
+     *  set the InputEvent as consumed.
+     */
+    private Function<InputEvent,Boolean> allowedToConsumeInputEventFunction = event->true;
+    
     /**
      * The D&D handler.
      */
@@ -198,7 +204,7 @@ public class JmeFXInputListener implements RawInputListener {
             }
         }
 
-        if (container.isFocused() && !(event instanceof ProxyKeyInputEvent)) {
+        if (container.isFocused() && allowedToConsumeInputEventFunction.apply(event)) {
             event.setConsumed();
         }
 
@@ -279,7 +285,9 @@ public class JmeFXInputListener implements RawInputListener {
         if (!covered) {
             container.loseFocus();
         } else if (inputManager.isCursorVisible()) {
-            event.setConsumed();
+        	if(allowedToConsumeInputEventFunction.apply(event)) {
+        		event.setConsumed();
+        	}
             container.grabFocus();
         }
 
@@ -521,4 +529,12 @@ public class JmeFXInputListener implements RawInputListener {
         assert this.dndHandler == null || dndHandler == null : "duplicate dnd handler register? ";
         this.dndHandler = dndHandler;
     }
+
+    /**
+     * set a function, which defines, if the input listener is allowed to consume certain input events
+     *  
+     */
+	public void setAllowedToConsumeInputEventFunction(Function<InputEvent, Boolean> allowedToConsumeInputEventFunction) {
+		this.allowedToConsumeInputEventFunction = allowedToConsumeInputEventFunction;
+	}
 }
