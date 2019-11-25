@@ -20,7 +20,7 @@ import java.util.Map;
  */
 public class JfxKeyInput extends JfxInput implements KeyInput {
 
-    public static final Map<KeyCode, Integer> KEY_CODE_TO_JME = new HashMap<>();
+    private static final Map<KeyCode, Integer> KEY_CODE_TO_JME = new HashMap<>();
 
     static {
         KEY_CODE_TO_JME.put(KeyCode.ESCAPE, KEY_ESCAPE);

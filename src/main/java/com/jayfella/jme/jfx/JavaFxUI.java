@@ -53,7 +53,7 @@ public class JavaFxUI {
 
         Node guiNode = ((SimpleApplication)application).getGuiNode();
         container = (JmeFxContainerImpl) JmeFxContainer.install(application, guiNode);
-
+        
         group = new Group();
         uiscene = new AnchorPane();
         uiscene.setMinWidth(app.getCamera().getWidth());
@@ -80,8 +80,13 @@ public class JavaFxUI {
 
         application.getStateManager().attach(new JavaFxUpdater());
 
-        CrossInputHandler crossInputHandler = new CrossInputHandler(application, uiscene);
-        crossInputHandler.bind();
+        //Handling now cross input
+        //Adding input handler
+        JmeMemoryInputHandler memoryInputHandler = new JmeMemoryInputHandler();
+        app.getInputManager().addRawInputListener(memoryInputHandler);
+        //Set allowed to consume function
+        JmeFxEventConsumeAllowedFunction allowedFunction = new JmeFxEventConsumeAllowedFunction(memoryInputHandler);
+        container.getInputListener().setAllowedToConsumeInputEventFunction(allowedFunction);
     }
 
     /**
