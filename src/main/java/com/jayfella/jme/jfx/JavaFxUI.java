@@ -16,13 +16,16 @@ import javafx.geometry.Bounds;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 public class JavaFxUI {
 
@@ -37,6 +40,8 @@ public class JavaFxUI {
     private Group group;
     private Scene scene;
     private AnchorPane uiscene;
+
+    Runnable removeExistingPopup = () -> {};
 
     // dialog - overlays an anchorpane to stop clicking background items and allows "darkening" too.
     private AnchorPane dialogAnchorPanel;
@@ -146,6 +151,31 @@ public class JavaFxUI {
             uiscene.getChildren().add(node);
             recursivelyNotifyChildrenAdded(node);
         });
+    }
+
+    public Runnable attachPopup(javafx.scene.Node node, double x, double y){
+        removeExistingPopup.run();
+
+        AnchorPane popupOverlay = new AnchorPane();
+        popupOverlay.setMinWidth(app.getCamera().getWidth());
+        popupOverlay.setMinHeight(app.getCamera().getHeight());
+        popupOverlay.getChildren().add(node);
+
+        node.setTranslateX(x);
+        node.setTranslateY(y);
+
+        group.getChildren().add(popupOverlay);
+
+        removeExistingPopup = () -> {
+            group.getChildren().remove(popupOverlay);
+            removeExistingPopup = () -> {};
+        };
+
+        popupOverlay.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            removeExistingPopup.run();
+        });
+
+        return removeExistingPopup;
     }
 
     /**
