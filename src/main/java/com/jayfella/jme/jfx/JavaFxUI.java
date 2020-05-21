@@ -153,6 +153,15 @@ public class JavaFxUI {
         });
     }
 
+    /**
+     * Attaches a popup onto the scene in a JME friendly way.
+     * Only one popup ban be onscreen at once, adding annother will remove the old one.
+     * Clicking away from the popup will close it.
+     * @param node The content to be displayed
+     * @param x X coordinate of the top left of the popup
+     * @param y Y coordinate of the top left of the popup
+     * @return A Runnable that if called will remove the popup
+     */
     public Runnable attachPopup(javafx.scene.Node node, double x, double y){
         removeExistingPopup.run();
 
@@ -171,7 +180,7 @@ public class JavaFxUI {
             removeExistingPopup = () -> {};
         };
 
-        popupOverlay.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+        popupOverlay.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             removeExistingPopup.run();
         });
 
