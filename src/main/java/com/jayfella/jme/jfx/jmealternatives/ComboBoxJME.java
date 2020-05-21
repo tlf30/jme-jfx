@@ -33,7 +33,8 @@ public class ComboBoxJME<T> extends ComboBox<T> {
         items.setMaxHeight(maxHeight);
 
         removeListPopup = JavaFxUI.getInstance().attachPopup(items, boundsInScene.getMinX(), boundsInScene.getMaxY());
-        items.setOnMouseClicked(event -> {
+
+        items.setOnMousePressed(event -> {
             getSelectionModel().select(items.getSelectionModel().getSelectedItem());
             removeListPopup.run();
         });
