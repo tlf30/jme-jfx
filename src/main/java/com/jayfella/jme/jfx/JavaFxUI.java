@@ -155,7 +155,7 @@ public class JavaFxUI {
 
     /**
      * Attaches a popup onto the scene in a JME friendly way.
-     * Only one popup ban be onscreen at once, adding annother will remove the old one.
+     * Only one popup can be onscreen at once, adding annother will remove the old one.
      * Clicking away from the popup will close it.
      * @param node The content to be displayed
      * @param x X coordinate of the top left of the popup
