@@ -5,11 +5,11 @@ plugins {
 }
 
 javafx {
-    version = "11.0.2"
+    version = "16"
     modules = [ 'javafx.controls' ]
 }
 
-group 'com.jayfella'
+group 'io.tlf.jme'
 version '1.1.5'
 
 sourceCompatibility = 11
@@ -19,15 +19,12 @@ repositories {
 }
 
 project.ext {
-    jmeVer = "3.2.3-stable"
-    slf4jVer = "1.7.25"
+    jmeVer = "3.4.0-stable"
 }
 
 dependencies {
     implementation "org.jmonkeyengine:jme3-core:$jmeVer"
     implementation "org.jmonkeyengine:jme3-lwjgl3:$jmeVer"
-
-    implementation "org.slf4j:slf4j-api:$slf4jVer"
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
@@ -42,4 +39,4 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 
 artifacts {
     archives sourcesJar, javadocJar
-} 
+}
