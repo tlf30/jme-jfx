@@ -1,3 +1,11 @@
+1.2.0
+---
+* Fix cursors not working
+* Fix input events for more consistent consumption
+* Modifications for jfx 12+
+* Modification for jme 3.4.0
+* Other minor fixes
+
 1.1.5
 ---
 * Fix for situations when *keyup* events are being consumed by javafx when JME consumes *keydown*.
