@@ -1,20 +1,19 @@
-jme-jfx-gui
--
+# jme-jfx
 
- [ ![Download](https://api.bintray.com/packages/jayfella/com.jayfella/jme-jfx-11/images/download.svg) ](https://bintray.com/jayfella/com.jayfella/jme-jfx-11/_latestVersion) 
- 
+**Requires**:
+* Java 11
+* JavaFX 12+ (compatible up to 16)
+* jMonkeyEngine 3.4.0
 
-**Requires**: Java 11
-
-A JavaFX 11 implementation for JmonkeyEngine that allows you to use a regular JavaFX GUI in your games.
+A JavaFX implementation for JmonkeyEngine that allows you to use a regular JavaFX GUI in your games.
 
 **Introduction**
 -  
-This implementation is based on the JavaSaBr implementation of JME-JFX with the dependency to RLib removed
+This implementation is based on the JavaSaBr and Jayfella implementation of JME-JFX with the dependency to RLib and sl4j removed
 and any 3D scene code removed, leaving only the 2D GuiNode implementation.
-Additionally no external repository URLs are required. Simply add the dependency to your project and start using it.
+Additionally, no external repository URLs are required. Simply add the dependency to your project and start using it.
 
-Why no 3D scene implementation? In practice it makes sense to use JavaFX as a 2D GUI, and for the 3D scene I recommend
+Why no 3D scene implementation? In practice, it makes sense to use JavaFX as a 2D GUI, and for the 3D scene I recommend
 Lemur.
 
 This implementation fully supports FXML and CSS, which means you can use the Gluon SceneBuilder application
@@ -34,7 +33,7 @@ plugins {
 
 // choose the javafx modules you want to import.
 javafx { 
-    version = "11.0.2"
+    version = "16"
     modules = [ 'javafx.controls', 'javafx.fxml' ]
 }
 
