@@ -10,7 +10,7 @@ javafx {
 }
 
 group 'io.tlf.jme'
-version '1.1.5'
+version '1.2.0'
 
 sourceCompatibility = 11
 
