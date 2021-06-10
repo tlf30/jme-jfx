@@ -2,15 +2,18 @@ plugins {
     id 'java'
     id 'maven'
     id 'org.openjfx.javafxplugin' version '0.0.7'
+    id 'io.github.gradle-nexus.publish-plugin' version '1.1.0'
 }
 
 javafx {
     version = "12"
-    modules = [ 'javafx.controls' ]
+    modules = ['javafx.controls']
 }
 
 group 'io.tlf.jme'
-version '1.2.0'
+version '1.2.1'
+
+apply from: './publishing/publishing.gradle'
 
 sourceCompatibility = 11
 
@@ -25,18 +28,4 @@ project.ext {
 dependencies {
     implementation "org.jmonkeyengine:jme3-core:$jmeVer"
     implementation "org.jmonkeyengine:jme3-lwjgl3:$jmeVer"
-}
-
-task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-
-artifacts {
-    archives sourcesJar, javadocJar
 }

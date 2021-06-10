@@ -1,3 +1,7 @@
+1.2.1
+---
+* Modify build scripts for maven central release
+
 1.2.0
 ---
 * Fix cursors not working
