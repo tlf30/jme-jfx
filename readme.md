@@ -39,7 +39,7 @@ javafx {
 
 // import the jme-jfx dependency
 dependencies {
-    implementation 'io.tlf.jme:jme-jfx:1.2.0'
+    implementation 'io.tlf.jme:jme-jfx:1.2.1'
 }
 ```
 
